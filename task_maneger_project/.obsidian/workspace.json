@@ -41,12 +41,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Jornaul/Relatories/2025-02-07.md",
+                "file": "Jornaul/Relatories/2025-02-08.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2025-02-07"
+              "title": "2025-02-08"
             }
           }
         ],
@@ -199,8 +199,13 @@
   },
   "active": "036215379c0ef16e",
   "lastOpenFiles": [
-    "Jornaul/RoadMap.md",
     "Jornaul/Relatories/2025-02-07.md",
+    "Jornaul/RoadMap.md",
+    "Jornaul/Relatories/2025-02-08.md",
+    "TechStack/Database/Postgree DB/Why postgree?.md",
+    "TechStack/Database/Postgree DB/Postgree - Index.md",
+    "TechStack/Database/Postgree DB/Multiples DB.md",
+    "TechStack/Database/Postgree DB/Index setup.md",
     "Untitled.md",
     "Resume - Index.md",
     "Jornaul/Relatories",
@@ -209,7 +214,6 @@
     "TechStack/DevOps/Dev Ops - Index.md",
     "TechStack/BackEnd/FastApi/Postgree DB Integration/Postgree DB Integration - Index.md",
     "TechStack/BackEnd/FastApi/FastApi - Index.md",
-    "TechStack/Database/Postgree DB/Postgree - Index.md",
     "TechStack/Docker/Docker - Index.md",
     "TechStack/Docker/Docker Images.md",
     "TechStack/Front_End/React/Dependencies/Dependencies - Index.md",
@@ -222,10 +226,6 @@
     "TechStack/BackEnd/FastApi/Log System.md",
     "TechStack/BackEnd/FastApi/Error Handeling.md",
     "TechStack/BackEnd/FastApi/Postgree DB Integration/SqlModel - ORM.md",
-    "TechStack/BackEnd/FastApi/Postgree DB Integration/Database Connection.md",
-    "TechStack/BackEnd/FastApi/Env Variables.md",
-    "TechStack/BackEnd/FastApi/routes/Routes Index.md",
-    "TechStack/BackEnd/FastApi/models/Models - Index.md",
     "TechStack/BackEnd/FastApi/Untitled",
     "TechStack/BackEnd/FastApi/models",
     "TechStack/BackEnd/FastApi/routes",
