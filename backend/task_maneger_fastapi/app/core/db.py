@@ -2,19 +2,18 @@ from sqlmodel import Field, SQLModel, create_engine, Session
 from sqlalchemy.engine import URL
 ##need to import all models to proper create tables in db
 from app.models import category, task
-import os
-from dotenv import load_dotenv
-
-load_dotenv()  # Load environment variables from .env file
+from app.core.config import settings
 
 
 ## Should be using settings package, latter on we will learn how to use it
+
+
 url_object = URL.create(
     "postgresql+psycopg2",
-    username=os.getenv('DATABASE_USERNAME'),
-    password=os.getenv('DATABASE_PASSWORD'), 
-    host=os.getenv('DATABASE_HOST'),
-    database=os.getenv('DATABASE_NAME'),
+    username=settings.DATABASE_USERNAME,
+    password=settings.DATABASE_PASSWORD, 
+    host=settings.DATABASE_HOST,
+    database=settings.DATABASE_NAME,
 )
 
 

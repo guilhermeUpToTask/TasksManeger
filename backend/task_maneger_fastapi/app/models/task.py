@@ -15,10 +15,10 @@ class CreateTask(TaskBase):
     pass
 
 class UpdateTask(TaskBase):
-    name: str | None
-    description: str | None
-    category_id: int | None
-    status: str | None
+    name: str | None = Field(default=None)
+    description: str | None = Field(default=None)
+    category_id: int | None = Field(default=None)
+    status: str | None = Field(default=None)
 
 class DeleteTask(SQLModel):
     id: int

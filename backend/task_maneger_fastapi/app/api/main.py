@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from api.routes import categories, tasks
+from app.api.routes import categories, tasks
 
 api_router = APIRouter()
 api_router.include_router(categories.router)

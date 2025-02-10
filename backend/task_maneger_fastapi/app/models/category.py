@@ -11,8 +11,8 @@ class CreateCategory(CategoryBase):
     pass
 
 class UpdateCategory(CategoryBase):
-    name: str | None
-    description: str | None
+    name: str | None = Field(default=None)
+    description: str | None = Field(default=None)
 
 class DeleteCategory(SQLModel):
     id: int
