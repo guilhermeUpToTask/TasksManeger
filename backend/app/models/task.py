@@ -1,7 +1,6 @@
 
 from sqlmodel import Field, SQLModel
 
-
 class TaskBase(SQLModel):
     name: str
     description: str
@@ -9,6 +8,7 @@ class TaskBase(SQLModel):
     status: str
 
 class Task(TaskBase, table=True):
+    __tablename__ = "task"
     id: int| None = Field(default=None, primary_key=True)
 
 class CreateTask(TaskBase):

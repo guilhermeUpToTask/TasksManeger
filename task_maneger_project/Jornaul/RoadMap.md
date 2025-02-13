@@ -2,9 +2,9 @@ Create git repository - check
 Create gitignore - check
 Create FastApi Environment - check
 Create React Environment
-Create Database in Postgree
-Create db schemas
-Setup database connection in fastapi
+Create Database in Postgree - check
+Create db schemas - check
+Setup database connection in fastapi - check
 Create models from db schemas in Fastapi - check
 Create CRUD routes from models in Fastapi - check
 Create unit test for the models in Fastapi
