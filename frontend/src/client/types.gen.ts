@@ -3,7 +3,7 @@
 export type Category = {
 	name: string;
 	description: string;
-	id?: number;
+	id: number;
 };
 
 export type CreateCategory = {
@@ -27,7 +27,7 @@ export type Task = {
 	description: string;
 	category_id: number;
 	status: string;
-	id?: number | null;
+	id: number;
 };
 
 export type UpdateCategory = {
