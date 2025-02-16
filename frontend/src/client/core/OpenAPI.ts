@@ -41,7 +41,7 @@ export type OpenAPIConfig = {
 };
 
 export const OpenAPI: OpenAPIConfig = {
-	BASE: "http://localhost:8000", //need to get the base url automatic
+	BASE: "http://localhost/api", //need to get the base url automatic
 	CREDENTIALS: "include",
 	ENCODE_PATH: undefined,
 	HEADERS: undefined,

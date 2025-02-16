@@ -10,10 +10,10 @@ def custom_generate_unique_id(route: APIRoute) -> str:
 
 
 app = FastAPI(
+    root_path="/api",              # Requests are prefixed with /api
     title=settings.PROJECT_NAME,
     generate_unique_id_function=custom_generate_unique_id,
 )
-
 app.include_router(api_router)
 app.add_middleware(
         CORSMiddleware,

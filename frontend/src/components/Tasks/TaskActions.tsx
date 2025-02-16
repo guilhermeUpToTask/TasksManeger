@@ -37,7 +37,7 @@ export default function TaskActions({ task }: TaskActionsProps) {
         },
     });
 
-    const onEditHandler = (data: UpdateTask) => {
+    const onUpdateCategory = (data: UpdateTask) => {
         updateMutation.mutate(data);
     };
     const onDeleteHandler = () => {
@@ -45,7 +45,7 @@ export default function TaskActions({ task }: TaskActionsProps) {
     };
 
     const onConfirmHandler = () => {
-        onEditHandler({...task, status:'completed'
+        onUpdateCategory({...task, status:'completed'
         })
     };
 
