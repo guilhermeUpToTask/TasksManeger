@@ -6,12 +6,23 @@ import {
     Category,
     UpdateCategory,
 } from "../../client";
+import {
+    IconButton,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuList,
+    useDisclosure,
+} from "@chakra-ui/react";
+import { ChevronDownIcon, EditIcon, DeleteIcon } from "@chakra-ui/icons";
+import Modal from "../commons/Modal";
+import CategoryForm from "./CategoryForm";
 
-interface CategoriesServiceProps {
+interface CategoryActionsProps {
     category: Category;
 }
 
-export default function CategoryActions({ category }: CategoriesServiceProps) {
+export default function CategoryActions({ category }: CategoryActionsProps) {
     const queryClient = useQueryClient();
     const updateMutation = useMutation({
         mutationFn: (data: UpdateCategory) =>
@@ -43,18 +54,45 @@ export default function CategoryActions({ category }: CategoriesServiceProps) {
         },
     });
 
-    const onUpdateCategory = (data:Category) =>{
-        updateMutation.mutate(data)
-    }
-    const onDeleteCategory = () =>{
+    const onUpdateCategory = (data: UpdateCategory) => {
+        updateMutation.mutate(data);
+        onClose()
+    };
+    const onDeleteCategory = () => {
         deleteMutation.mutate(category.id)
-    }
+    };
 
-    return(
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    return (
         <>
-        <button>Edit Category</button>
-        <button onClick={onDeleteCategory}>Delete Category</button>
+            <Modal
+                isOpen={isOpen}
+                onClose={onClose}
+                onOpen={onOpen}
+                modalTitle="Update Category"
+            >
+              <CategoryForm
+              onClose={onClose}
+              onSubmit={onUpdateCategory}
+              category={category}
+              />
+            </Modal>
+    
+            <Menu>
+                <MenuButton
+                    as={IconButton}
+                    icon={<ChevronDownIcon />}
+                    variant="ghost"
+                />
+                <MenuList>
+                    <MenuItem icon={<EditIcon />} onClick={onOpen}>
+                        Edit
+                    </MenuItem>
+                    <MenuItem icon={<DeleteIcon />} onClick={onDeleteCategory}>
+                        Delete
+                    </MenuItem>
+                </MenuList>
+            </Menu>
         </>
-    )
-
+    );
 }

@@ -1,14 +1,25 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ApiError, CategoriesService, CreateCategory } from "../../client";
 import React from "react";
-import { Button, FormControl, FormLabel, Input, Textarea, VStack } from "@chakra-ui/react";
+import {
+    Button,
+    Flex,
+    FormControl,
+    FormLabel,
+    Input,
+    Textarea,
+    useDisclosure,
+    VStack,
+} from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
+import Modal from "../commons/Modal";
+import CategoryForm from "./CategoryForm";
 
-export default function AddCategory(){
-    const queryClient = useQueryClient()
+export default function AddCategory() {
+    const queryClient = useQueryClient();
     const createMutation = useMutation({
         mutationFn: (data: CreateCategory) =>
-           CategoriesService.createCategory({requestBody:data}),
+            CategoriesService.createCategory({ requestBody: data }),
         onSuccess: () => {
             console.log("sucesefully created category");
         },
@@ -20,27 +31,26 @@ export default function AddCategory(){
         },
     });
     const { register, handleSubmit } = useForm<CreateCategory>();
-
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const onSubmit = (data: CreateCategory) => {
-      createMutation.mutate(data)
+        createMutation.mutate(data);
+        onClose()
     };
-  
-    return (
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <VStack spacing={4} p={4} borderWidth={1} borderRadius="lg">
-          <FormControl>
-            <FormLabel htmlFor="name">Name</FormLabel>
-            <Input id="name" {...register("name")} required />
-          </FormControl>
-  
-          <FormControl>
-            <FormLabel htmlFor="description">Description</FormLabel>
-            <Textarea id="description" {...register("description")} required />
-          </FormControl>
-  
-          <Button type="submit" colorScheme="blue">Submit</Button>
-        </VStack>
-      </form>
-    )
 
+    return (
+        <>
+            <Button onClick={onOpen}>Add Category</Button>
+            <Modal
+                isOpen={isOpen}
+                onClose={onClose}
+                onOpen={onOpen}
+                modalTitle="Create New Category"
+            >
+              <CategoryForm
+              onClose={onClose}
+              onSubmit={onSubmit}
+              />
+            </Modal>
+        </>
+    );
 }

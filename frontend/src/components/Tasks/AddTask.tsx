@@ -1,9 +1,5 @@
 import React from "react";
-import {
-    ApiError,
-    CreateTask,
-    TasksService,
-} from "../../client";
+import { ApiError, CreateTask, TasksService } from "../../client";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import {
     Button,
@@ -11,19 +7,28 @@ import {
     FormLabel,
     Input,
     Select,
+    useDisclosure,
     VStack,
 } from "@chakra-ui/react";
+import Modal from "../commons/Modal";
+
 import { useForm } from "react-hook-form";
+import { AddIcon } from "@chakra-ui/icons";
+import TaskForm from "./TaskForm";
 
 const statuses = ["Completed", "Pending"];
 
-export default function AddTask() {
-    
+interface AddTaskProps{
+    category_id:number
+}
+
+export default function AddTask({category_id}:AddTaskProps) {
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const queryClient = useQueryClient();
 
     const mutation = useMutation({
         mutationFn: (data: CreateTask) =>
-            TasksService.createTask({ requestBody: data}),
+            TasksService.createTask({ requestBody: data }),
         onSuccess: () => {
             console.log("task created succeffuly");
         },
@@ -37,56 +42,34 @@ export default function AddTask() {
 
     const onAddTask = (data: CreateTask) => {
         mutation.mutate(data);
+        onClose();
     };
 
     const { register, handleSubmit } = useForm<CreateTask>();
 
-
     return (
         <>
-            <h1>Add Task</h1>
-            <form onSubmit={handleSubmit(onAddTask)}>
-                <VStack spacing={4} p={4} borderWidth={1} borderRadius="lg">
-                    <FormControl>
-                        <FormLabel htmlFor="name">Name</FormLabel>
-                        <Input id="name" {...register("name")} required />
-                    </FormControl>
-
-                    <FormControl>
-                        <FormLabel htmlFor="description">Description</FormLabel>
-                        <Input
-                            id="description"
-                            {...register("description")}
-                            required
-                        />
-                    </FormControl>
-
-                    <FormControl>
-                        <FormLabel htmlFor="category_id">Category ID</FormLabel>
-                        <Input
-                            id="category_id"
-                            type="number"
-                            {...register("category_id")}
-                            required
-                        />
-                    </FormControl>
-
-                    <FormControl>
-                        <FormLabel htmlFor="status">Status</FormLabel>
-                        <Select id="status" {...register("status")} required>
-                            {statuses.map((status) => (
-                                <option key={status} value={status}>
-                                    {status}
-                                </option>
-                            ))}
-                        </Select>
-                    </FormControl>
-
-                    <Button type="submit" colorScheme="blue">
-                        Submit
-                    </Button>
-                </VStack>
-            </form>
+            <Button
+                mt={4}
+                leftIcon={<AddIcon />}
+                w="full"
+                variant="outline"
+                onClick={onOpen}
+            >
+                Add Task
+            </Button>
+            <Modal
+                isOpen={isOpen}
+                onClose={onClose}
+                onOpen={onOpen}
+                modalTitle="Create New Task"
+            >
+                <TaskForm
+                onClose={onClose}
+                onSubmit={onAddTask}
+                category_id={category_id}
+                />
+            </Modal>
         </>
     );
 }

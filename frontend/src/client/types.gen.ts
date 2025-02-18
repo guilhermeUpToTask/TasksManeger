@@ -36,10 +36,10 @@ export type UpdateCategory = {
 };
 
 export type UpdateTask = {
-	name?: string | null;
-	description?: string | null;
-	category_id?: number | null;
-	status?: string | null;
+	name?: string | undefined;
+	description?: string | undefined;
+	category_id?: number | undefined;
+	status?: string | undefined;
 };
 
 export type ValidationError = {

@@ -5,28 +5,30 @@ import React from "react";
 import TaskList from "./TaskList";
 import AddTask from "./AddTask";
 
-
-export default function Tasks(){
-    const queryClient = useQueryClient()
-    const {
-        data:tasks,
-        isPending
-    } = useQuery({
-        queryFn:TasksService.readTasks,
-        queryKey:["tasks"]
-    })
-
-    return(
-        <>
-            <h1>Tasks</h1>
-            <AddTask/>
-            {isPending ? (
-                <div>Loading...</div>
-            ): <TaskList tasks={tasks? tasks: []}/>}
-        </>
-    )
-    
-
-
+interface TasksProps {
+    category_id: number;
 }
 
+export default function Tasks({ category_id }: TasksProps) {
+    const queryClient = useQueryClient();
+    const { data: tasks, isPending } = useQuery({
+        queryFn: TasksService.readTasks,
+        queryKey: ["tasks"],
+    });
+
+    const getfilteredTasks = (tasks: Task[], category_id: number) => {
+        return tasks.filter((task: Task) => task.category_id === category_id);
+    };
+    return (
+        <>
+            {isPending ? (
+                <div>Loading...</div>
+            ) : (
+                <TaskList
+                    tasks={tasks ? getfilteredTasks(tasks, category_id) : []}
+                    category_id={category_id}
+                />
+            )}
+        </>
+    );
+}

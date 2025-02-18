@@ -3,6 +3,8 @@ import './App.css'
 import React from 'react'
 import Tasks from './components/Tasks'
 import Categories from './components/Categories'
+import MainLayout from './routes/_layout'
+import IntegradeLayout from './routes/_layout/IntegradeLayout'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -11,7 +13,9 @@ function App() {
     <>
       <h1>Task Manager Web Aplication</h1>
       <Categories/>
-      <Tasks/>
+
+      <MainLayout/>
+      <IntegradeLayout/>
     </>
   )
 }
