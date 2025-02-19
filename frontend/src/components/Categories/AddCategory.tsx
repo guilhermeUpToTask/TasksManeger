@@ -1,16 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ApiError, CategoriesService, CreateCategory } from "../../client";
 import React from "react";
-import {
-    Button,
-    Flex,
-    FormControl,
-    FormLabel,
-    Input,
-    Textarea,
-    useDisclosure,
-    VStack,
-} from "@chakra-ui/react";
+import { Button, useDisclosure } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import Modal from "../commons/Modal";
 import CategoryForm from "./CategoryForm";

@@ -56,13 +56,13 @@ export default function CategoryActions({ category }: CategoryActionsProps) {
 
     const onUpdateCategory = (data: UpdateCategory) => {
         updateMutation.mutate(data);
-        onClose()
+        onClose();
     };
     const onDeleteCategory = () => {
-        deleteMutation.mutate(category.id)
+        deleteMutation.mutate(category.id);
     };
 
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const { isOpen, onOpen, onClose } = useDisclosure();
     return (
         <>
             <Modal
@@ -71,13 +71,13 @@ export default function CategoryActions({ category }: CategoryActionsProps) {
                 onOpen={onOpen}
                 modalTitle="Update Category"
             >
-              <CategoryForm
-              onClose={onClose}
-              onSubmit={onUpdateCategory}
-              category={category}
-              />
+                <CategoryForm
+                    onClose={onClose}
+                    onSubmit={onUpdateCategory}
+                    category={category}
+                />
             </Modal>
-    
+
             <Menu>
                 <MenuButton
                     as={IconButton}

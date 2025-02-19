@@ -1,7 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-    ApiError,
-    CategoriesService,
     Category,
     CreateCategory,
     UpdateCategory,
@@ -14,7 +11,6 @@ import {
     FormLabel,
     Input,
     Textarea,
-    useDisclosure,
     VStack,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";

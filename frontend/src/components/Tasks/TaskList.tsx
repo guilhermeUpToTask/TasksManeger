@@ -1,7 +1,5 @@
 import React from "react";
 import { Task } from "../../client";
-import TaskActions from "./TaskActions";
-import { AddIcon } from "@chakra-ui/icons";
 import {
     Stack,
 } from "@chakra-ui/react";

@@ -3,20 +3,13 @@ import { ApiError, CreateTask, TasksService } from "../../client";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import {
     Button,
-    FormControl,
-    FormLabel,
-    Input,
-    Select,
+
     useDisclosure,
-    VStack,
 } from "@chakra-ui/react";
 import Modal from "../commons/Modal";
 
-import { useForm } from "react-hook-form";
 import { AddIcon } from "@chakra-ui/icons";
 import TaskForm from "./TaskForm";
-
-const statuses = ["Completed", "Pending"];
 
 interface AddTaskProps{
     category_id:number

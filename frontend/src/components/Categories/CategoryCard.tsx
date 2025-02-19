@@ -6,12 +6,7 @@ import {
     CardHeader,
     Flex,
     Heading,
-    CloseButton,
     CardBody,
-    Stack,
-    Tag,
-    Button,
-    CardFooter,
 } from "@chakra-ui/react";
 import CategoryActions from "./CategoryActions";
 import Tasks from "../Tasks";

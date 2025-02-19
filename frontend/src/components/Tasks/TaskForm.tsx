@@ -1,6 +1,5 @@
 import React from "react";
-import { ApiError, CreateTask, TasksService, UpdateTask } from "../../client";
-import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { CreateTask, UpdateTask } from "../../client";
 import {
     Button,
     Flex,
@@ -8,13 +7,10 @@ import {
     FormLabel,
     Input,
     Select,
-    useDisclosure,
     VStack,
 } from "@chakra-ui/react";
-import Modal from "../commons/Modal";
 
 import { useForm } from "react-hook-form";
-import { AddIcon } from "@chakra-ui/icons";
 
 const statuses = ["Completed", "Pending"];
 
@@ -45,11 +41,7 @@ export default function TaskForm({
             <VStack spacing={4} p={4} borderWidth={1} borderRadius="lg">
                 <FormControl>
                     <FormLabel htmlFor="name">Name</FormLabel>
-                    <Input
-                        id="name"
-                        {...register("name")}
-                        required
-                    />
+                    <Input id="name" {...register("name")} required />
                 </FormControl>
 
                 <FormControl>
@@ -73,11 +65,7 @@ export default function TaskForm({
 
                 <FormControl>
                     <FormLabel htmlFor="status">Status</FormLabel>
-                    <Select
-                        id="status"
-                        {...register("status")}
-                        required
-                    >
+                    <Select id="status" {...register("status")} required>
                         {statuses.map((status) => (
                             <option key={status} value={status}>
                                 {status}

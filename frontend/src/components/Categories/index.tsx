@@ -3,7 +3,7 @@ import { CategoriesService } from "../../client";
 import React from "react";
 import AddCategory from "./AddCategory";
 import CategoryList from "./CategoryList";
-import { Container, Flex, Heading } from "@chakra-ui/react";
+import { Flex, Heading } from "@chakra-ui/react";
 
 export default function Categories() {
     const queryClient = useQueryClient();

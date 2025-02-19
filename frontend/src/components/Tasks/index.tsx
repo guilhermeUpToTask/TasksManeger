@@ -1,9 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { TasksService, Task } from "../../client/";
-import { useEffect } from "react";
 import React from "react";
 import TaskList from "./TaskList";
-import AddTask from "./AddTask";
 
 interface TasksProps {
     category_id: number;
