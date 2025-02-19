@@ -1,7 +1,7 @@
 Create git repository - check
 Create gitignore - check
 Create FastApi Environment - check
-Create React Environment
+Create React Environment - check
 Create Database in Postgree - check
 Create db schemas - check
 Setup database connection in fastapi - check
@@ -10,15 +10,14 @@ Create CRUD routes from models in Fastapi - check
 Create unit test for the models in Fastapi
 Create unit test for the routes in Fastapi
 Develop the components for React
-Create Api integration in React
-Create hooks for the api calls using tanstack query in React
-Manege the state in each component in React
+Create Api integration in React - check
+Manege the state in each component in React - check
 Handle Error in React
 Handle Error in Fastapi
 Develop Logging system in Fastapi
-Dockerize React
-Dockerize Fastapi
-Dockerize Postgree
-Docker compose the network
-Setup nginext
+Dockerize React - check
+Dockerize Fastapi - check
+Dockerize Postgree - check
+Docker compose the network - check
+Setup nginext - check
 Create Integration Tests

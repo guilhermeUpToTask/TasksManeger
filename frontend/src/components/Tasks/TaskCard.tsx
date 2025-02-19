@@ -12,6 +12,8 @@ import {
     Button,
     CardFooter,
     Text,
+    CardBody,
+    Box,
 } from "@chakra-ui/react";
 interface TaskCardProps {
     task: Task;
@@ -19,7 +21,7 @@ interface TaskCardProps {
 
 const getStatusColor = (status: string) => {
     switch (status) {
-        case "pedent":
+        case "Pending":
             return "yellow";
         default:
             return "green";
@@ -28,29 +30,23 @@ const getStatusColor = (status: string) => {
 
 export default function TaskCard({ task }: TaskCardProps) {
     return (
-        <Card key={task.id} p={3} variant="outline">
-            <CardHeader p={0} pb={1}>
-                <Flex>
-                    <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
-                        <Heading size="sm">{task.name}</Heading>
-                    </Flex>
-                    <CloseButton />
-                </Flex>
-            </CardHeader>
-
-            <Text fontSize="sm" color="gray.600" mb={2}>
-                {task.description}
-            </Text>
-            <Tag
-                size="sm"
-                colorScheme={getStatusColor(task.status)}
-                borderRadius="full"
-            >
-                {task.status}
-            </Tag>
-            <CardFooter justifyContent="flex-end">
-                <Button size="sm">Confirm</Button>
-            </CardFooter>
+        <Card key={task.id} p={4} variant="outline">
+            <Flex justify="space-between">
+                      <Box>
+                        <Text fontWeight="bold">{task.name}</Text>
+                        <Text fontSize="sm" color="gray.600" mb={2}>
+                          {task.description}
+                        </Text>
+                        <Tag 
+                          size="sm" 
+                          colorScheme={getStatusColor(task.status)}
+                          borderRadius="full"
+                        >
+                          {task.status}
+                        </Tag>
+                      </Box>
+                <TaskActions task={task} />
+            </Flex>
         </Card>
     );
 }

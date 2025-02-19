@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Jornaul/Relatories/2025-02-13.md",
+                "file": "Jornaul/RoadMap.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2025-02-13"
+              "title": "RoadMap"
             }
           }
         ],
@@ -185,8 +185,8 @@
   },
   "active": "a1ad986b02d19472",
   "lastOpenFiles": [
-    "Jornaul/Relatories/2025-02-07.md",
     "Jornaul/Relatories/2025-02-13.md",
+    "Jornaul/Relatories/2025-02-07.md",
     "Jornaul/Relatories/2025-02-10.md",
     "2025-02-10.md",
     "Jornaul/RoadMap.md",

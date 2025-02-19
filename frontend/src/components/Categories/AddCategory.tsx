@@ -14,6 +14,7 @@ import {
 import { useForm } from "react-hook-form";
 import Modal from "../commons/Modal";
 import CategoryForm from "./CategoryForm";
+import { AddIcon } from "@chakra-ui/icons";
 
 export default function AddCategory() {
     const queryClient = useQueryClient();
@@ -34,22 +35,21 @@ export default function AddCategory() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const onSubmit = (data: CreateCategory) => {
         createMutation.mutate(data);
-        onClose()
+        onClose();
     };
 
     return (
         <>
-            <Button onClick={onOpen}>Add Category</Button>
+            <Button leftIcon={<AddIcon />} colorScheme="teal" onClick={onOpen}>
+                Add Category
+            </Button>
             <Modal
                 isOpen={isOpen}
                 onClose={onClose}
                 onOpen={onOpen}
                 modalTitle="Create New Category"
             >
-              <CategoryForm
-              onClose={onClose}
-              onSubmit={onSubmit}
-              />
+                <CategoryForm onClose={onClose} onSubmit={onSubmit} />
             </Modal>
         </>
     );

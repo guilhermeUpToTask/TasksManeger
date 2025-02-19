@@ -16,7 +16,7 @@ export default function TaskList({ tasks, category_id }: TaskListProps) {
     return (
         <Stack spacing={4}>
             {tasks.map((task) => (
-                <TaskCard task={task}/>
+                <TaskCard task={task} key={task.id}/>
             ))}
             <AddTask category_id={category_id}/>
         </Stack>

@@ -45,8 +45,6 @@ export default function AddTask({category_id}:AddTaskProps) {
         onClose();
     };
 
-    const { register, handleSubmit } = useForm<CreateTask>();
-
     return (
         <>
             <Button

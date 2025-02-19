@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CategoriesService, Category } from "../../client";
 import React from "react";
 import CategoryActions from "./CategoryActions";
-import { Flex } from "@chakra-ui/react";
+import { Box, Center, Flex, Wrap } from "@chakra-ui/react";
 import CategoryCard from "./CategoryCard";
 
 interface CategoryListProps {
@@ -10,9 +10,18 @@ interface CategoryListProps {
 }
 
 export default function CategoryList({ categories }: CategoryListProps) {
-    return <Flex p={8} gap={6} minH="100vh" bg="gray.100">
-        {categories.map((category) => (
-            <CategoryCard key={category.id} category={category} />
-        ))}
-    </Flex>;
+    return (
+            <Wrap
+                p={8}
+                minH="100vh"
+                minWidth={"80vw"}
+                bg="gray.100"
+                spacing={"1rem"}
+                justify="center"
+            >
+                {categories.map((category) => (
+                    <CategoryCard key={category.id} category={category} />
+                ))}
+            </Wrap>
+    );
 }
