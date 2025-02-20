@@ -27,6 +27,7 @@ async def read_task(task_id: int, session:SessionDep):
 
 @router.post(path='/', response_model=Task)
 async def create_task(task_in: CreateTask, session:SessionDep):
+    print('session in route',session.connection())
     if task_in.category_id is not None:
         statement = select(Category).where(Category.id == task_in.category_id)
         category = session.exec(statement).first()

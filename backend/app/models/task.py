@@ -5,7 +5,7 @@ class TaskBase(SQLModel):
     name: str
     description: str
     category_id: int = Field(foreign_key="category.id", ondelete="CASCADE")
-    status: str
+    status: str | None= Field(default="pending")
 
 class Task(TaskBase, table=True):
     __tablename__ = "task"
