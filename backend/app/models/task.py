@@ -4,7 +4,7 @@ from sqlmodel import Field, SQLModel
 class TaskBase(SQLModel):
     name: str
     description: str
-    category_id: int = Field(foreign_key="category.id")
+    category_id: int = Field(foreign_key="category.id", ondelete="CASCADE")
     status: str
 
 class Task(TaskBase, table=True):

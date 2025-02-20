@@ -9,7 +9,7 @@ Create models from db schemas in Fastapi - check
 Create CRUD routes from models in Fastapi - check
 Create unit test for the models in Fastapi
 Create unit test for the routes in Fastapi
-Develop the components for React
+Develop the components for React - check
 Create Api integration in React - check
 Manege the state in each component in React - check
 Handle Error in React
