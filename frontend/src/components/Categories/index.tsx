@@ -1,13 +1,12 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { CategoriesService } from "../../client";
-import React from "react";
 import AddCategory from "./AddCategory";
 import CategoryList from "./CategoryList";
 import { Flex, Heading } from "@chakra-ui/react";
+import React from "react";
 
 export default function Categories() {
-    const queryClient = useQueryClient();
-    const { data: categories, isPending } = useQuery({
+    const { data: categories } = useQuery({
         queryFn: CategoriesService.readCategories,
         queryKey: ["categories"],
     });

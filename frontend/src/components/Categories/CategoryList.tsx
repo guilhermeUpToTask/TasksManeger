@@ -1,8 +1,8 @@
 
 import {  Category } from "../../client";
-import React from "react";
 import { Wrap } from "@chakra-ui/react";
 import CategoryCard from "./CategoryCard";
+import React from "react";
 
 interface CategoryListProps {
     categories: Category[];

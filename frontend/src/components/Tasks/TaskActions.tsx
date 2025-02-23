@@ -71,6 +71,7 @@ export default function TaskActions({ task }: TaskActionsProps) {
             <IconButton
                 icon={<CheckIcon />}
                 aria-label="Complete Task"
+                test-id="complete-task"
                 colorScheme="green"
                 size="sm"
                 onClick={() => onConfirmHandler(task)}

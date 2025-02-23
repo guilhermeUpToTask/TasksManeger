@@ -20,7 +20,7 @@ export default function TaskCard({ task }: TaskCardProps) {
         <Card key={task.id} p={4} variant="outline">
             <Flex justify="space-between">
                 <Box>
-                    <Text fontWeight="bold">{task.name}</Text>
+                    <Text fontWeight="bold" data-testid="task-name">{task.name}</Text>
                     <Text fontSize="sm" color="gray.600" mb={2}>
                         {task.description}
                     </Text>
@@ -28,7 +28,8 @@ export default function TaskCard({ task }: TaskCardProps) {
                         size="sm"
                         colorScheme={getStatusColor(task.status)}
                         borderRadius="full"
-                    >
+                        data-testid="task-status"
+                     >
                         {task.status}
                     </Tag>
                 </Box>
