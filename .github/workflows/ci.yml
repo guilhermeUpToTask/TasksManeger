@@ -26,6 +26,7 @@ jobs:
 
       # Build and start all services defined in your docker-compose file
       - name: Build and Start Services
+
         run: docker compose up -d --build
 
       # Optionally wait for the PostgreSQL DB to be ready (using your healthcheck)
@@ -33,11 +34,13 @@ jobs:
         run: |
           echo "Waiting for PostgreSQL to be ready..."
           for i in {1..10}; do
+
             docker compose exec db pg_isready -U $DATABASE_USERNAME -d $DATABASE_NAME && break || sleep 5;
           done
 
       # Run the prestart container to execute initialization tasks
       - name: Run Prestart Tasks
+
         run: docker compose run prestart
 
       # Execute backend tests using pytest inside the backend container
