@@ -20,6 +20,8 @@ jobs:
             - name: Checkout Code
               uses: actions/checkout@v3
 
+            - name: Debug .env File
+              run: cat .env
             # Set up Docker Buildx (optional, but useful for multi-arch builds)
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v2
@@ -28,9 +30,6 @@ jobs:
             - name: Build and Start Services
 
               run: docker compose up -d --build
-
-            - name: Debug .env File
-              run: cat .env
 
             # Optionally wait for the PostgreSQL DB to be ready (using your healthcheck)
             - name: Wait for Database to be Ready
