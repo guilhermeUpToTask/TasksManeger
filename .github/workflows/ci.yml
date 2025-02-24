@@ -16,6 +16,10 @@ jobs:
             DATABASE_PORT: ${{ secrets.DATABASE_PORT }} # Typically "5432"
             PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
         steps:
+        - name: Create .env file
+          run: |
+           echo "MY_SECRET=${{ secrets.MY_SECRET }}" >> .env
+            echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
             # Checkout your repository code
             - name: Checkout Code
               uses: actions/checkout@v3
