@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  integration-test:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+      DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+      DATABASE_PORT: ${{ secrets.DATABASE_PORT }}  # Typically "5432"
+      PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
+    steps:
+      # Checkout your repository code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Set up Docker Buildx (optional, but useful for multi-arch builds)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Build and start all services defined in your docker-compose file
+      - name: Build and Start Services
+        run: docker-compose up -d --build
+
+      # Optionally wait for the PostgreSQL DB to be ready (using your healthcheck)
+      - name: Wait for Database to be Ready
+        run: |
+          echo "Waiting for PostgreSQL to be ready..."
+          for i in {1..10}; do
+            docker-compose exec db pg_isready -U $DATABASE_USERNAME -d $DATABASE_NAME && break || sleep 5;
+          done
+
+      # Run the prestart container to execute initialization tasks
+      - name: Run Prestart Tasks
+        run: docker-compose run prestart
+
+      # Execute backend tests using pytest inside the backend container
+      - name: Run Backend Tests
+        run: docker-compose exec backend pytest --maxfail=1 --disable-warnings -q
+
+      # Run end-to-end tests with Playwright.
+      # This example assumes you have a package.json script named "test:e2e"
+      # and that your e2e tests can run from the host environment against your live Docker services.
+      - name: Set up Node.js for E2E Tests
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: Install Dependencies & Run E2E Tests
+        run: |
+          npm install
+          npm run test:e2e
+
+      # Tear down all running containers after tests complete
+      - name: Tear Down Services
+        run: docker-compose down
