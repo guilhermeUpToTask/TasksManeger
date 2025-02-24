@@ -1,5 +1,7 @@
 import { test, expect } from "@playwright/test";
 
+3//Need to separate em differents tests and use a aftercall to delete the category if the test fail
+
 test.describe("Category and Task Management", () => {
     test.beforeEach(async ({ page }) => {
         await page.goto("http://localhost:5173");
