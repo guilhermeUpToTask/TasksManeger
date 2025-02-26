@@ -45,8 +45,6 @@ services:
         condition: service_healthy
         restart: true
     command: bash scripts/pre_start.sh
-    env_file:
-      - .env
     environment:
       - PROJECT_NAME=${PROJECT_NAME}
       - DATABASE_USERNAME=${DATABASE_USERNAME}
