@@ -1,70 +1,105 @@
 name: CI
 
 on:
-    push:
-        branches: [main]
-    pull_request:
-        branches: [main]
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-    integration-test:
-        runs-on: ubuntu-latest
-        env:
-            DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
-            DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-            DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-            DATABASE_PORT: ${{ secrets.DATABASE_PORT }} # Typically "5432"
-            PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
-        steps:
-            - name: Create .env file
-              run: |
-                echo "DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}" >> .env
-                echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> .env
-            # Checkout your repository code
-            - name: Checkout Code
-              uses: actions/checkout@v3
+  integration-test:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+      DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+      DATABASE_PORT: ${{ secrets.DATABASE_PORT }}  # Typically "5432"
+      PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
+    steps:
+      # Checkout your repository code
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-            - name: Debug .env File
-              run: cat .env
-            # Set up Docker Buildx (optional, but useful for multi-arch builds)
-            - name: Set up Docker Buildx
-              uses: docker/setup-buildx-action@v2
+      # Setup The NodeJS  
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+    
+      # Install the necessaries dependencies
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm install
 
-            # Build and start all services defined in your docker-compose file
-            - name: Build and Start Services
+      # Build the frontend assets
+      - name: Build Frontend
+        working-directory: frontend
+        run: |
+          npm run build
 
-              run: docker compose up -d --build
+      # Set up Docker Buildx (optional, but useful for multi-arch builds)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-            # Optionally wait for the PostgreSQL DB to be ready (using your healthcheck)
-            - name: Wait for Database to be Ready
-              run: |
-                  echo "Waiting for PostgreSQL to be ready..."
-                  for i in {1..10}; do
+      # Build and start all services defined in your docker-compose file
+      - name: Build and Start Services
 
-                    docker compose exec db pg_isready -U $DATABASE_USERNAME -d $DATABASE_NAME && break || sleep 5;
-                  done
+        run: docker compose up -d --build
 
-            # Run the prestart container to execute initialization tasks
-            - name: Run Prestart Tasks
+      # Optionally wait for the PostgreSQL DB to be ready (using your healthcheck)
+      - name: Wait for Database to be Ready
+        run: |
+          echo "Waiting for PostgreSQL to be ready..."
+          for i in {1..10}; do
 
-              run: docker compose run prestart
+            docker compose exec db pg_isready -U $DATABASE_USERNAME -d $DATABASE_NAME && break || sleep 5;
+          done
 
-            # Execute backend tests using pytest inside the backend container
-            - name: Run Backend Tests
-              run: docker compose exec backend pytest --maxfail=1 --disable-warnings -q
+      # Run the prestart container to execute initialization tasks
+      - name: Run Prestart Tasks
 
-            # Run end-to-end tests with Playwright.
-            # This example assumes you have a package.json script named "test:e2e"
-            # and that your e2e tests can run from the host environment against your live Docker services.
-            - name: Set up Node.js for E2E Tests
-              uses: actions/setup-node@v3
-              with:
-                  node-version: "16"
-            - name: Install Dependencies & Run E2E Tests
-              run: |
-                  npm install
-                  npm run test:e2e
+        run: docker compose run prestart
 
-            # Tear down all running containers after tests complete
-            - name: Tear Down Services
-              run: docker-compose down
+      # Execute backend tests using pytest inside the backend container
+      - name: Run Backend Tests
+        run: docker compose exec backend pytest --maxfail=1 --disable-warnings -q
+
+      # Wait for nginx (serving your frontend) to be ready
+      - name: Wait for Nginx to be Ready
+        run: |
+          echo "Waiting for Nginx to be ready..."
+          for i in {1..10}; do
+            if curl -s http://localhost:80 | grep -q "<html"; then
+              echo "Nginx is ready!"
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "Nginx did not become ready in time."
+          exit 1
+
+      # Run a simple test to ensure that the frontend is being served by nginx
+      - name: Test Frontend Served by Nginx
+        run: |
+          response=$(curl -s http://localhost:80)
+          if echo "$response" | grep -q "<html"; then
+            echo "Frontend is served correctly!"
+          else
+            echo "Frontend is not served correctly."
+            exit 1
+          fi
+
+      # Install the necesseraries browers for playwright to exec
+      - name: Install Playwright Browsers
+        working-directory: frontend    
+        run: npx playwright install --with-deps
+
+      # Run end-to-end tests with Playwright.
+      - name: Run E2E Tests
+        working-directory: frontend
+        run: |
+          npm run test:e2e
+
+      # Tear down all running containers after tests complete
+      - name: Tear Down Services
+        run: docker compose down
