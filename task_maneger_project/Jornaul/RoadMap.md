@@ -13,7 +13,7 @@ Develop the components for React - check
 Create Api integration in React - check
 Manege the state in each component in React - check
 Handle Error in React
-Handle Error in Fastapi
+Handle Error in Fastapi - check
 Develop Logging system in Fastapi
 Dockerize React - check
 Dockerize Fastapi - check
@@ -21,7 +21,8 @@ Dockerize Postgree - check
 Docker compose the network - check
 Setup nginext - check
 Create Integration Tests - check
-Setup CI CD in github
+Setup CI  in github - check
+Setup CD  in github - 
 Deploy to the AWS
 Make it pretier
 Documentate the whole project
