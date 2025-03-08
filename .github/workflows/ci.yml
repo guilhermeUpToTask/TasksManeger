@@ -90,10 +90,10 @@ jobs:
           )
           
           for image in "${images[@]}"; do
-            echo "Taggeando a imagem $image..."
-            docker tag "$image" "${{ secrets.DOCKER_USERNAME }}/$image" || { echo "Falha ao taggear $image"; exit 1; }
-            echo "Fazendo push da imagem $image..."
-            docker push "${{ secrets.DOCKER_USERNAME }}/$image" || { echo "Falha ao fazer push de $image"; exit 1; }
+            echo "Tagging the image $image..."
+            docker tag "$image" "${{ secrets.DOCKER_USERNAME }}/$image" || { echo "Failure in tagging $image"; exit 1; }
+            echo "Pusing the image $image..."
+            docker push "${{ secrets.DOCKER_USERNAME }}/$image" || { echo "fail on trying to push $image"; exit 1; }
           done
 
       - name: Tear Down Services
