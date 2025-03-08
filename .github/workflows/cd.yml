@@ -1,0 +1,23 @@
+name: CD
+
+on:
+    push:
+      branches:
+        - main
+  
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Pull Latest Docker Images
+        run: docker compose pull
+
+      - name: Stop and Remove Existing Containers
+        run: docker compose down
+
+      - name: Restart Services with Updated Images
+        run: docker compose up -d --remove-orphans
