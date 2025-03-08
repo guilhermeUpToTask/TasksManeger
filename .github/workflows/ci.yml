@@ -13,72 +13,64 @@ jobs:
       DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
       DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
       DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-      DATABASE_PORT: ${{ secrets.DATABASE_PORT }}  # Typically "5432"
+      DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
       PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
     steps:
-      # Checkout your repository code
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Setup The NodeJS  
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-    
-      # Install the necessaries dependencies
-      - name: Install dependencies
-        working-directory: frontend
-        run: npm install
-
-      # Build the frontend assets
-      - name: Build Frontend
-        working-directory: frontend
-        run: |
-          npm run build
-
-      # Set up Docker Buildx (optional, but useful for multi-arch builds)
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      # Build and start all services defined in your docker-compose file
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: Build and Start Services
+        run: |
+          set -e
+          docker compose up -d --build
 
-        run: docker compose up -d --build
-
-      # Optionally wait for the PostgreSQL DB to be ready (using your healthcheck)
       - name: Wait for Database to be Ready
         run: |
+          set -e
           echo "Waiting for PostgreSQL to be ready..."
           for i in {1..10}; do
-
-            docker compose exec db pg_isready -U $DATABASE_USERNAME -d $DATABASE_NAME && break || sleep 5;
+            if docker compose exec db pg_isready -U "$DATABASE_USERNAME" -d "$DATABASE_NAME"; then
+              echo "Database is ready!"
+              exit 0
+            fi
+            echo "Attempt $i/10: Database not ready, waiting..."
+            sleep 5
           done
+          echo "PostgreSQL did not become ready in time."
+          exit 1
 
-      # Run the prestart container to execute initialization tasks
       - name: Run Prestart Tasks
+        run: docker compose run --rm prestart
 
-        run: docker compose run prestart
-
-      # Execute backend tests using pytest inside the backend container
       - name: Run Backend Tests
         run: docker compose exec backend pytest --maxfail=1 --disable-warnings -q
 
-      # Wait for nginx (serving your frontend) to be ready
       - name: Wait for Nginx to be Ready
         run: |
+          set -e
           echo "Waiting for Nginx to be ready..."
           for i in {1..10}; do
             if curl -s http://localhost:80 | grep -q "<html"; then
               echo "Nginx is ready!"
               exit 0
             fi
+            echo "Attempt $i/10: Nginx not ready, waiting..."
             sleep 5
           done
           echo "Nginx did not become ready in time."
           exit 1
 
-      # Run a simple test to ensure that the frontend is being served by nginx
       - name: Test Frontend Served by Nginx
         run: |
           response=$(curl -s http://localhost:80)
@@ -89,17 +81,23 @@ jobs:
             exit 1
           fi
 
-      # Install the necesseraries browers for playwright to exec
-      - name: Install Playwright Browsers
-        working-directory: frontend    
-        run: npx playwright install --with-deps
-
-      # Run end-to-end tests with Playwright.
-      - name: Run E2E Tests
-        working-directory: frontend
+      - name: Tag and Push Docker Images
         run: |
-          npm run test:e2e
+          set -e
+          images=(
+            "tasksmaneger_backend:latest"
+            "tasksmaneger_nginx:latest"
+          )
+          
+          for image in "${images[@]}"; do
+            echo "Tagging the image $image..."
+            docker tag "$image" "${{ secrets.DOCKER_USERNAME }}/$image" || { echo "Failure in tagging $image"; exit 1; }
+            echo "Pusing the image $image..."
+            docker push "${{ secrets.DOCKER_USERNAME }}/$image" || { echo "fail on trying to push $image"; exit 1; }
+          done
 
-      # Tear down all running containers after tests complete
       - name: Tear Down Services
-        run: docker compose down
+        if: always()
+        run: docker compose down --volumes
+
+## We omit playright for now justo to test the integration with docker hub, needs to put it back again later
