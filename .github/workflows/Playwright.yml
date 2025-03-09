@@ -51,7 +51,7 @@ jobs:
                   docker build \
                     --build-arg VITE_API_URL=${VITE_API_URL} \
                     -f frontend/Dockerfile.playwright \
-                    -t frontend:playwright .
+                    -t frontend:playwright fronted
 
             - name: Run Playwright E2E tests
               run: |
