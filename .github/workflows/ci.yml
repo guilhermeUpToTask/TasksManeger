@@ -17,6 +17,8 @@ jobs:
       PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+      DOCKER_IMAGE_BACKEND: tasksmaneger_backend:latest # need to fix the issue in ci, we need to run this env
+      DOCKER_IMAGE_NGINX=: tasksmaneger_nginx:latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
