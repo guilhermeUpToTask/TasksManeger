@@ -5,10 +5,19 @@ on:
       branches:
         - main
   
-
 jobs:
   deploy:
     runs-on: self-hosted
+    env:
+        DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+        DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+        DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
+        PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        DOCKER_IMAGE_BACKEND: ${{ vars.DOCKER_IMAGE_BACKEND }}
+        DOCKER_IMAGE_NGINX: ${{ vars.DOCKER_IMAGE_NGINX }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
