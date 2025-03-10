@@ -90,7 +90,7 @@ jobs:
           )
           
           for image in "${images[@]}"; do
-            prod_image = ${image/-dev/-prod}
+            prod_image=${image/-dev/-prod}
             
             echo "Tagging the image $image as $prod_image..."
             docker tag "$image:latest" "${{ secrets.DATABASE_USERNAME}}"/$prod_image:latest || {echo "failure in tagging $image"}
