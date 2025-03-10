@@ -88,15 +88,16 @@ jobs:
             "tasksmaneger_backend-dev"
             "tasksmaneger_nginx-dev"
           )
-          
-          docker image ls
 
           for image in "${images[@]}"; do
             prod_image=${image/-dev/-prod}
             
             echo "Tagging the image $image as $prod_image..."
-            docker tag "$image:latest" "${{ secrets.DATABASE_USERNAME}}"/$prod_image:latest || {echo "failure in tagging $image"}
+            # Tag the dev image to the prod image
+            docker tag "$image:latest" "${{ secrets.DOCKER_USERNAME }}/$prod_image:latest" || { echo "Failure in tagging $image"; exit 1; }
             
+            docker image ls
+
             echo "Pushing the image $prod_image..."
             docker push "${{ secrets.DOCKER_USERNAME }}/$prod_image" || { echo "fail on trying to push $prod_image"; exit 1; }
           done
