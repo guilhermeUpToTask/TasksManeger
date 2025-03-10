@@ -89,6 +89,8 @@ jobs:
             "tasksmaneger_nginx-dev"
           )
           
+          docker image ls
+
           for image in "${images[@]}"; do
             prod_image=${image/-dev/-prod}
             
