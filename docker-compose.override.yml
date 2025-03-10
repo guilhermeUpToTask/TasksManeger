@@ -1,0 +1,25 @@
+services:
+  backend:
+    image: backend-dev
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+
+  prestart:
+    image: backend-dev
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
+  nginx:
+    image: nginx-dev
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+      args:
+        VITE_API_URL: "http://localhost:8000"
+    ports:
+      - "80:80"
+
