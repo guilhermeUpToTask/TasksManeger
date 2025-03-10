@@ -17,8 +17,6 @@ jobs:
       PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-      DOCKER_IMAGE_BACKEND: tasksmaneger_backend:latest
-      DOCKER_IMAGE_NGINX: tasksmaneger_nginx:latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -87,15 +85,18 @@ jobs:
         run: |
           set -e
           images=(
-            "tasksmaneger_backend:latest"
-            "tasksmaneger_nginx:latest"
+            "tasksmaneger_backend-dev"
+            "tasksmaneger_nginx-dev"
           )
           
           for image in "${images[@]}"; do
-            echo "Tagging the image $image..."
-            docker tag "$image" "${{ secrets.DOCKER_USERNAME }}/$image" || { echo "Failure in tagging $image"; exit 1; }
-            echo "Pusing the image $image..."
-            docker push "${{ secrets.DOCKER_USERNAME }}/$image" || { echo "fail on trying to push $image"; exit 1; }
+            prod_image = ${image/-dev/-prod}
+            
+            echo "Tagging the image $image as $prod_image..."
+            docker tag "$image:latest" "${{ secrets.DATABASE_USERNAME}}"/$prod_image:latest || {echo "failure in tagging $image"}
+            
+            echo "Pushing the image $prod_image..."
+            docker push "${{ secrets.DOCKER_USERNAME }}/$prod_image" || { echo "fail on trying to push $prod_image"; exit 1; }
           done
 
       - name: Tear Down Services

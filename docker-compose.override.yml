@@ -1,6 +1,6 @@
 services:
   backend:
-    image: backend-dev
+    image: tasksmaneger_backend-dev
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -8,13 +8,13 @@ services:
       - "8000:8000"
 
   prestart:
-    image: backend-dev
+    image: tasksmaneger_backend-dev
     build:
       context: ./backend
       dockerfile: Dockerfile
 
   nginx:
-    image: nginx-dev
+    image: tasksmaneger_nginx-dev
     build:
       context: .
       dockerfile: nginx/Dockerfile
