@@ -18,10 +18,6 @@ services:
         build:
             context: .
             dockerfile: nginx/Dockerfile
-            args:
-                VITE_API_URL: "http://localhost:8000"
-        ports:
-            - "80:80"
     playwright:
         image: tasksmaneger_playwright-dev
         build:
