@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Pull Latest Docker Images
-        run: docker compose pull
+        run: docker compose -f docker-compose.yml pull
 
       - name: Stop and Remove Existing Containers
         run: docker compose down
