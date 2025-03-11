@@ -45,18 +45,11 @@ jobs:
                     sleep 5
                   done
                   echo "Timeout waiting for services." && exit 1
-
-            - name: Build Playwright image
-              run: |
-                  docker build \
-                    --build-arg VITE_API_URL=${VITE_API_URL} \
-                    -f frontend/Dockerfile.playwright \
-                    -t frontend:playwright frontend
-
+                  
             - name: Run Playwright E2E tests
               run: |
                   # Run the test container on the same network as docker compose services (app-network)
-                  docker run --network=app-network --rm frontend:playwright npx playwright test
+                  docker compose run --rm playwright npx playwright test --fail-on-flaky-tests --trace=retain-on-failure
 
             - name: Tear down services
               run: docker compose down
