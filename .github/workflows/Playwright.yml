@@ -1,0 +1,55 @@
+name: Playwright Tests
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+    workflow_dispatch:
+        inputs:
+            debug_enabled:
+                description: "Run the build with tmate debugging enabled (https://github.com/marketplace/actions/debugging-with-tmate)"
+                required: false
+                default: "false"
+jobs:
+    e2e-tests:
+        runs-on: ubuntu-latest
+
+        env:
+            DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+            DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+            DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+            DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
+            DOCKER_IMAGE_BACKEND: ${{ vars.DOCKER_IMAGE_BACKEND }}
+            DOCKER_IMAGE_NGINX: ${{ vars.DOCKER_IMAGE_NGINX }}
+            PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
+            VITE_API_URL: "http://localhost:8000"
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Build and start Docker Compose services
+              run: docker compose up -d --build
+
+            - name: Wait for services to be healthy
+              run: |
+                  echo "Waiting for Postgres to be ready..."
+                  # Wait up to 60 seconds (adjust as needed)
+                  for i in {1..12}; do
+                    if docker compose ps | grep "healthy"; then
+                      echo "Services are healthy."
+                      exit 0
+                    fi
+                    echo "Still waiting..."
+                    sleep 5
+                  done
+                  echo "Timeout waiting for services." && exit 1
+                  
+            - name: Run Playwright E2E tests
+              run: |
+                  # Run the test container on the same network as docker compose services (app-network)
+                  docker compose run --rm playwright npx playwright test --fail-on-flaky-tests --trace=retain-on-failure
+
+            - name: Tear down services
+              run: docker compose down

@@ -4,7 +4,7 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Category and Task Management", () => {
     test.beforeEach(async ({ page }) => {
-        await page.goto("http://localhost");
+        await page.goto("/");
     });
 
     test("should create, update, and delete a category with tasks", async ({

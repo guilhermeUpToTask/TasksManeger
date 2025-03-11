@@ -1,0 +1,45 @@
+services:
+    backend:
+        image: tasksmaneger_backend-dev
+        build:
+            context: ./backend
+            dockerfile: Dockerfile
+        ports:
+            - "8000:8000"
+
+    prestart:
+        image: tasksmaneger_backend-dev
+        build:
+            context: ./backend
+            dockerfile: Dockerfile
+
+    nginx:
+        image: tasksmaneger_nginx-dev
+        build:
+            context: .
+            dockerfile: nginx/Dockerfile
+            args:
+                VITE_API_URL: "http://localhost:8000"
+        ports:
+            - "80:80"
+    playwright:
+        image: tasksmaneger_playwright-dev
+        build:
+            context: "./frontend"
+            dockerfile: Dockerfile.playwright
+            args:
+                VITE_API_URL: "HTTP://localhost:8000"
+
+        depends_on:
+            - backend
+        ports:
+            - 9323:9323
+        networks:
+            - app-network
+        environment:
+            - VITE_API_URL=http://backend:8000
+            # For the reports when run locally
+            - PLAYWRIGHT_HTML_HOST=0.0.0.0
+        volumes:
+            - ./frontend/blob-report:/app/blob-report
+            - ./frontend/test-results:/app/test-results

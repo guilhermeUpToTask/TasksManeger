@@ -9,7 +9,7 @@ RUN npm install
 
 # Copy frontend source code and build
 COPY /frontend/ /app/
-ARG VITE_API_URL=/api  # Critical for API path resolution
+ARG VITE_API_URL=/api
 ENV VITE_API_URL=$VITE_API_URL
 
 RUN npm run build
