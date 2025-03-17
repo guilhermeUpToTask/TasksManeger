@@ -1,75 +1,92 @@
 services:
-  db:
-    image: postgres:13-alpine
-    environment:
-      - POSTGRES_USER=${DATABASE_USERNAME}
-      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
-      - POSTGRES_DB=${DATABASE_NAME}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    networks:
-      - app-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USERNAME} -d ${DATABASE_NAME}"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+    db:
+        image: postgres:13-alpine
+        environment:
+            - POSTGRES_USER=${DATABASE_USERNAME}
+            - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+            - POSTGRES_DB=${DATABASE_NAME}
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
+        networks:
+            - app-network
+        healthcheck:
+            test:
+                [
+                    "CMD-SHELL",
+                    "pg_isready -U ${DATABASE_USERNAME} -d ${DATABASE_NAME}",
+                ]
+            interval: 5s
+            timeout: 5s
+            retries: 5
 
-  backend:
-    image: ${DOCKER_IMAGE_BACKEND}
-    build: ./backend/
-    environment:
-      - PROJECT_NAME=${PROJECT_NAME}
-      - DATABASE_USERNAME=${DATABASE_USERNAME}
-      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
-      - DATABASE_HOST=db  # ← This is the critical fix
-      - DATABASE_NAME=${DATABASE_NAME}
-      - DATABASE_PORT=${DATABASE_PORT}
-    ports:
-      - "8000:8000"
-    depends_on:
-      db:
-        condition: service_healthy
-    networks:
-      - app-network
-  prestart:
-    image: ${DOCKER_IMAGE_BACKEND}
-    build:
-      context: ./backend
-    networks:
-      - app-network
-    depends_on:
-      db:
-        condition: service_healthy
-        restart: true
-    command: bash scripts/pre_start.sh
-    environment:
-      - PROJECT_NAME=${PROJECT_NAME}
-      - DATABASE_USERNAME=${DATABASE_USERNAME}
-      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
-      - DATABASE_HOST=db
-      - DATABASE_NAME=${DATABASE_NAME}
-      - DATABASE_PORT=${DATABASE_PORT}
-  nginx:
-    image: ${DOCKER_IMAGE_NGINX}
-    build:
-      context: . 
-      dockerfile: nginx/Dockerfile
-    environment:
-      - PROJECT_NAME=${PROJECT_NAME}
-      - VITE_API_URL=/api
-    ports:
-      - "80:80"
-    networks:
-      - app-network
-    depends_on:
-      - backend
-     
+    backend:
+        image: ${DOCKER_IMAGE_BACKEND}
+        build: ./backend/
+        environment:
+            - PROJECT_NAME=${PROJECT_NAME}
+            - DATABASE_USERNAME=${DATABASE_USERNAME}
+            - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+            - DATABASE_HOST=db # ← This is the critical fix
+            - DATABASE_NAME=${DATABASE_NAME}
+            - DATABASE_PORT=${DATABASE_PORT}
+        ports:
+            - "8000:8000"
+        depends_on:
+            db:
+                condition: service_healthy
+        networks:
+            - app-network
+    prestart:
+        image: ${DOCKER_IMAGE_BACKEND}
+        build:
+            context: ./backend
+        networks:
+            - app-network
+        depends_on:
+            db:
+                condition: service_healthy
+                restart: true
+        command: bash scripts/pre_start.sh
+        environment:
+            - PROJECT_NAME=${PROJECT_NAME}
+            - DATABASE_USERNAME=${DATABASE_USERNAME}
+            - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+            - DATABASE_HOST=db
+            - DATABASE_NAME=${DATABASE_NAME}
+            - DATABASE_PORT=${DATABASE_PORT}
+    nginx:
+        image: ${DOCKER_IMAGE_NGINX}
+        build:
+            context: .
+            dockerfile: nginx/Dockerfile
+        environment:
+            - PROJECT_NAME=${PROJECT_NAME}
+            - VITE_API_URL=/api
+        ports:
+            - "80:80"
+            - "443:443"
+        networks:
+            - app-network
+        depends_on:
+            - backend
+        volumes:
+            - ./certbot/conf:/etc/letsencrypt
+            - ./certbot/www:/var/www/certbot
+    certbot:
+        image: certbot/certbot
+        container_name: certbot
+        volumes: 
+            - ./certbot/conf:/etc/letsencrypt
+            - ./certbot/www:/var/www/certbot
+        command: renew
+            --no-random-sleep-on-renew
+            --webroot
+            -w /var/www/certbot
 volumes:
-  postgres_data:
+    postgres_data:
 
 networks:
-  app-network:
-    driver: bridge
+    app-network:
+        driver: bridge
