@@ -64,6 +64,8 @@ services:
         environment:
             - PROJECT_NAME=${PROJECT_NAME}
             - VITE_API_URL=/api
+            - SSL_CERTIFICATE=/etc/nginx/certs/dev.crt
+            - SSL_CERTIFICATE_KEY=/etc/nginx/certs/dev.key
         ports:
             - "80:80"
             - "443:443"
@@ -74,6 +76,8 @@ services:
         volumes:
             - ./certbot/conf:/etc/letsencrypt
             - ./certbot/www:/var/www/certbot
+            - ./certs:/etc/nginx/certs:ro
+
     certbot:
         image: certbot/certbot
         container_name: certbot

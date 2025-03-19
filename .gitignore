@@ -99,4 +99,8 @@ data/  # If you have a data folder that shouldn't be tracked
 *.war
 *.apk
 
+#.env files
 .env
+
+#SSL Certificates
+certs/
