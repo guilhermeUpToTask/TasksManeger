@@ -64,8 +64,8 @@ services:
         environment:
             - PROJECT_NAME=${PROJECT_NAME}
             - VITE_API_URL=/api
-            - SSL_CERTIFICATE=/etc/nginx/certs/dev.crt
-            - SSL_CERTIFICATE_KEY=/etc/nginx/certs/dev.key
+            - SSL_CERTIFICATE=${SSL_CERTIFICATE}
+            - SSL_CERTIFICATE_KEY=${SSL_CERTIFICATE_KEY}
         ports:
             - "80:80"
             - "443:443"
