@@ -1,107 +1,116 @@
 name: CI
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
 
 jobs:
-  integration-test:
-    runs-on: ubuntu-latest
-    env:
-      DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
-      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-      DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-      DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
-      PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+    integration-test:
+        runs-on: ubuntu-latest
+        env:
+            DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+            DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+            DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+            DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
+            PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
+            DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+            DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+            SSL_CERTIFICATE: /etc/nginx/certs/dev.crt
+            SSL_CERTIFICATE_KEY: /etc/nginx/certs/dev.key
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+            - name: Generate self-signed certificate
+              run: |
+                  mkdir -p certs
+                  openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+                    -keyout certs/dev.key \
+                    -out certs/dev.crt \
+                    -subj "/CN=localhost"
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v2
 
-      - name: Build and Start Services
-        run: |
-          set -e
-          docker compose up -d --build
+            - name: Login to Docker Hub
+              uses: docker/login-action@v2
+              with:
+                  username: ${{ secrets.DOCKER_USERNAME }}
+                  password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Wait for Database to be Ready
-        run: |
-          set -e
-          echo "Waiting for PostgreSQL to be ready..."
-          for i in {1..10}; do
-            if docker compose exec db pg_isready -U "$DATABASE_USERNAME" -d "$DATABASE_NAME"; then
-              echo "Database is ready!"
-              exit 0
-            fi
-            echo "Attempt $i/10: Database not ready, waiting..."
-            sleep 5
-          done
-          echo "PostgreSQL did not become ready in time."
-          exit 1
+            - name: Build and Start Services
+              run: |
+                  set -e
+                  docker compose up -d --build
 
-      - name: Run Prestart Tasks
-        run: docker compose run --rm prestart
+            - name: Wait for Database to be Ready
+              run: |
+                  set -e
+                  echo "Waiting for PostgreSQL to be ready..."
+                  for i in {1..10}; do
+                    if docker compose exec db pg_isready -U "$DATABASE_USERNAME" -d "$DATABASE_NAME"; then
+                      echo "Database is ready!"
+                      exit 0
+                    fi
+                    echo "Attempt $i/10: Database not ready, waiting..."
+                    sleep 5
+                  done
+                  echo "PostgreSQL did not become ready in time."
+                  exit 1
 
-      - name: Run Backend Tests
-        run: docker compose exec backend pytest --maxfail=1 --disable-warnings -q
+            - name: Run Prestart Tasks
+              run: docker compose run --rm prestart
 
-      - name: Wait for Nginx to be Ready
-        run: |
-          set -e
-          echo "Waiting for Nginx to be ready..."
-          for i in {1..10}; do
-            if curl -s http://localhost:80 | grep -q "<html"; then
-              echo "Nginx is ready!"
-              exit 0
-            fi
-            echo "Attempt $i/10: Nginx not ready, waiting..."
-            sleep 5
-          done
-          echo "Nginx did not become ready in time."
-          exit 1
+            - name: Run Backend Tests
+              run: docker compose exec backend pytest --maxfail=1 --disable-warnings -q
 
-      - name: Test Frontend Served by Nginx
-        run: |
-          response=$(curl -s http://localhost:80)
-          if echo "$response" | grep -q "<html"; then
-            echo "Frontend is served correctly!"
-          else
-            echo "Frontend is not served correctly."
-            exit 1
-          fi
+            - name: Wait for Nginx to be Ready
+              run: |
+                  set -e
+                  echo "Waiting for Nginx to be ready..."
+                  for i in {1..10}; do
+                    if curl -s http://localhost:80 | grep -q "<html"; then
+                      echo "Nginx is ready!"
+                      exit 0
+                    fi
+                    echo "Attempt $i/10: Nginx not ready, waiting..."
+                    sleep 5
+                  done
+                  echo "Nginx did not become ready in time."
+                  exit 1
 
-      - name: Tag and Push Docker Images
-        run: |
-          set -e
-          images=(
-            "tasksmaneger_backend-dev"
-            "tasksmaneger_nginx-dev"
-          )
+            - name: Test Frontend Served by Nginx
+              run: |
+                  response=$(curl -s http://localhost:80)
+                  if echo "$response" | grep -q "<html"; then
+                    echo "Frontend is served correctly!"
+                  else
+                    echo "Frontend is not served correctly."
+                    exit 1
+                  fi
 
-          for image in "${images[@]}"; do
-            prod_image=${image/-dev/-prod}
-            
-            echo "Tagging the image $image as $prod_image..."
-            # Tag the dev image to the prod image
-            docker tag "$image:latest" "${{ secrets.DOCKER_USERNAME }}/$prod_image:latest" || { echo "Failure in tagging $image"; exit 1; }
+            - name: Tag and Push Docker Images
+              run: |
+                  set -e
+                  images=(
+                    "tasksmaneger_backend-dev"
+                    "tasksmaneger_nginx-dev"
+                  )
 
-            echo "Pushing the image $prod_image..."
-            docker push "${{ secrets.DOCKER_USERNAME }}/$prod_image" || { echo "fail on trying to push $prod_image"; exit 1; }
-          done
+                  for image in "${images[@]}"; do
+                    prod_image=${image/-dev/-prod}
+                    
+                    echo "Tagging the image $image as $prod_image..."
+                    # Tag the dev image to the prod image
+                    docker tag "$image:latest" "${{ secrets.DOCKER_USERNAME }}/$prod_image:latest" || { echo "Failure in tagging $image"; exit 1; }
 
-      - name: Tear Down Services
-        if: always()
-        run: docker compose down --volumes
+                    echo "Pushing the image $prod_image..."
+                    docker push "${{ secrets.DOCKER_USERNAME }}/$prod_image" || { echo "fail on trying to push $prod_image"; exit 1; }
+                  done
 
+            - name: Tear Down Services
+              if: always()
+              run: docker compose down --volumes
 ## We omit playright for now just to test the integration with docker hub, needs to put it back again later

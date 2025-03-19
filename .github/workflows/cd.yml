@@ -22,6 +22,8 @@ jobs:
         DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
         DOCKER_IMAGE_BACKEND: ${{ vars.DOCKER_IMAGE_BACKEND }}
         DOCKER_IMAGE_NGINX: ${{ vars.DOCKER_IMAGE_NGINX }}
+        SSL_CERTIFICATE: /etc/letsencrypt/live/taskmaneger.zapto.org/fullchain.pem
+        SSL_CERTIFICATE_KEY: /etc/letsencrypt/live/taskmaneger.zapto.org/privkey.pem
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3

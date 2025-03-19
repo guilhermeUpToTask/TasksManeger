@@ -37,8 +37,8 @@ http {
         server_name taskmaneger.zapto.org;
 
         # SSL certificates
-        ssl_certificate /etc/letsencrypt/live/taskmaneger.zapto.org/fullchain.pem;
-        ssl_certificate_key /etc/letsencrypt/live/taskmaneger.zapto.org/privkey.pem;
+        ssl_certificate ${SSL_CERTIFICATE};
+        ssl_certificate_key ${SSL_CERTIFICATE_KEY};
  
 
         # Security headers
