@@ -1,6 +1,6 @@
-# Fullstack Project Environment
+# Fullstack Project Template - TaskManager
 
-A **Fullstack Project Environment** built using the [Fullstack FastAPI Template](https://github.com/fastapi/full-stack-fastapi-template) that can be deployed on any VPS with minimal configuration.
+A **Fullstack Project Template** based on [Fullstack FastAPI Template](https://github.com/fastapi/full-stack-fastapi-template) that can be deployed on any VPS with minimal configuration.
 
 This project is a simple **Task Manager Application** built as an example to showcase a full-stack architecture featuring a modern React front-end and a robust FastAPI back-end.
 
@@ -65,7 +65,7 @@ The environment is designed to be lightweight and modular, making it easy to run
 
 - **FastAPI**
 - **SQLModel**
-- **Alabemic** (Migration Tool)
+- **Alabemic**
 - **PyTest**
 - **Pydantic**
 - **OpenAPI**
@@ -76,7 +76,7 @@ The environment is designed to be lightweight and modular, making it easy to run
 - **Chakra UI**
 - **TanStack Query**
 - **Axios**
-- **React Hook Form (or alternative form library)**
+- **React Hook Form**
 - **OpenAPI TypeScript Codegen**
 - **Playwright (E2E testing)**
 
@@ -107,7 +107,6 @@ The environment is designed to be lightweight and modular, making it easy to run
 
 - Docker & Docker Compose installed
 - Git
-- [Optional] Node.js & npm for frontend development
 
 ### Steps
 
