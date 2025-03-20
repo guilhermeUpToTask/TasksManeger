@@ -1,1 +1,0 @@
-Integration test was cover by playwirght end to end tests
