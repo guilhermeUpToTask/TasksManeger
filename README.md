@@ -1,4 +1,4 @@
-# Fullstack Project Template - TaskManager
+# Fullstack Project Template - TasksManager
 
 A **Fullstack Project Template** based on [Fullstack FastAPI Template](https://github.com/fastapi/full-stack-fastapi-template) that can be deployed on any VPS with minimal configuration.
 
@@ -197,7 +197,7 @@ Together, these workflows create a robust CI/CD pipeline that guarantees quality
 
 Experience the live demo of the Task Manager application at:\
 **[Live Demo URL]**\
-*(Replace with the actual URL of your demo)*
+[https://taskmaneger.zapto.org/]
 
 ---
 
