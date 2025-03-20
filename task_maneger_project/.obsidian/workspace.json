@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Jornaul/Relatories/2025-02-26.md",
+                "file": "Jornaul/RoadMap.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2025-02-26"
+              "title": "RoadMap"
             }
           }
         ]
@@ -170,18 +170,25 @@
   },
   "active": "6f6516ea4a4fd31b",
   "lastOpenFiles": [
+    "Introduction TaskManager.md",
+    "TechStack/Integration Tests/Integration Test.md",
+    "TechStack/DevOps/Nginx.md",
+    "TechStack/DevOps/FireWall.md",
+    "TechStack/DevOps/Dev Ops - Index.md",
+    "TechStack/DevOps/Bills Management.md",
+    "TechStack/DevOps/AWS Virtual machine.md",
+    "TechStack/CiCD/Github Actions - Index.md",
+    "Jornaul/RoadMap.md",
+    "Jornaul/Relatories/2025-03-19.md",
+    "Untitled.md",
+    "Jornaul/Relatories/2025-02-26.md",
     "Jornaul/Relatories/2025-02-23.md",
     "Jornaul/Relatories/2025-02-13.md",
     "Jornaul/Relatories/2025-02-10.md",
     "Jornaul/Relatories/2025-02-07.md",
     "Resume - Index.md",
     "Untitled 1.md",
-    "Untitled.md",
-    "TechStack/Integration Tests/Integration Test.md",
-    "Jornaul/RoadMap.md",
     "TechStack/Docker/React Server Image.md",
-    "Jornaul/Relatories/2025-02-26.md",
-    "Jornaul/Relatories/Untitled.md",
     "Jornaul/Relatories/2025-02-20.md",
     "2025-02-10.md",
     "Jornaul/Relatories/2025-02-08.md",
@@ -190,13 +197,6 @@
     "TechStack/Database/Postgree DB/Multiples DB.md",
     "TechStack/Database/Postgree DB/Index setup.md",
     "Jornaul/Relatories",
-    "TechStack/Database/Postgree DB/Backup.md",
-    "TechStack/Front_End/React/React Index.md",
-    "TechStack/DevOps/Dev Ops - Index.md",
-    "TechStack/BackEnd/FastApi/Postgree DB Integration/Postgree DB Integration - Index.md",
-    "TechStack/BackEnd/FastApi/FastApi - Index.md",
-    "TechStack/Docker/Docker - Index.md",
-    "TechStack/Docker/Docker Images.md",
     "TechStack/BackEnd/FastApi/Untitled",
     "TechStack/BackEnd/FastApi/models",
     "TechStack/BackEnd/FastApi/routes",

@@ -104,3 +104,6 @@ data/  # If you have a data folder that shouldn't be tracked
 
 #SSL Certificates
 certs/
+
+#Obisidian Docs
+task_maneger_project/

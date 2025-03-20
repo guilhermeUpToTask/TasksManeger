@@ -7,7 +7,7 @@ Create db schemas - check
 Setup database connection in fastapi - check
 Create models from db schemas in Fastapi - check
 Create CRUD routes from models in Fastapi - check
-Create unit test for the models in Fastapi
+Create unit test for the models in Fastapi 
 Create unit test for the routes in Fastapi - check
 Develop the components for React - check
 Create Api integration in React - check
@@ -22,8 +22,9 @@ Docker compose the network - check
 Setup nginext - check
 Create Integration Tests - check
 Setup CI  in github - check
-Setup CD  in github - 
-Deploy to the AWS
+Setup CD  in github - check
+Configurate TSL Certificate - check
+Deploy to the AWS - check
 Make it pretier
 Documentate the whole project
 Post it in linkedin
