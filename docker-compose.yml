@@ -89,15 +89,6 @@ services:
             --no-random-sleep-on-renew
             --webroot
             -w /var/www/certbot
-    fail2ban:
-        image: crazymax/fail2ban:latest
-        networks:
-            - app-network
-        volumes:
-            - ./nginx/logs:/var/log/nginx:ro # Mount the logs directory for reading
-            - ./fail2ban:/data # Mount your Fail2ban configuration directory
-        depends_on:
-            - nginx
 volumes:
     postgres_data:
 

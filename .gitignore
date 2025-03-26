@@ -104,3 +104,6 @@ data/  # If you have a data folder that shouldn't be tracked
 
 #SSL Certificates
 certs/
+
+#Fail2Ban Config
+fail2ban/
