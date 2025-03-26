@@ -1,5 +1,12 @@
 user nginx;
-worker_processes 1;
+
+worker_processes auto;
+
+# Enables the use of JIT for regular expressions to speed-up their processing.
+pcre_jit on;
+
+# Configures default error logger.
+error_log /var/log/nginx/error.log warn;
 
 events {
     worker_connections 1024;
@@ -14,18 +21,61 @@ http {
     include /etc/nginx/mime.types;
     default_type application/octet-stream;
 
+    # Hide Nginx version
+    server_tokens off;
+
+	# Specifies the maximum accepted body size of a client request, as
+	# indicated by the request header Content-Length. If the stated content
+	# length is greater than this size, then the client receives the HTTP
+	# error code 413. Set to 0 to disable. Default is '1m'.
+	client_max_body_size 1m;
+
+    # SSL settings
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers 'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384';
+    ssl_prefer_server_ciphers on;
+
+	# Enables a shared SSL cache with size that can hold around 8000 sessions.
+	# Default is 'none'.
+	ssl_session_cache shared:SSL:2m;
+
+	# Specifies a time during which a client may reuse the session parameters.
+	# Default is '5m'.
+	ssl_session_timeout 1h;
+
+	# Disable TLS session tickets (they are insecure). Default is 'on'.
+	ssl_session_tickets off;
+
+    # Security headers
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    add_header X-Content-Type-Options "nosniff";
+    add_header X-Frame-Options "DENY";
+    add_header X-XSS-Protection "1; mode=block";
+
+	# Sets the path, format, and configuration for a buffered log write.
+	access_log /var/log/nginx/access.log;
+
     # HTTP server (redirects to HTTPS)
     server {
         listen 80;
         server_name taskmaneger.zapto.org;
+        #Deny access to .env
+        location ~ /\.env {
+            deny all;
+        }
+        #Block know bot user agents
+        if ($http_user_agent ~* "python-requests") {
+            return 403;
+        }
 
+        #Here i belive can be a potentialy security leak
         # ACME Challenge Location (NO REDIRECT)
         location /.well-known/acme-challenge/ {
             root /var/www/certbot;
             default_type "text/plain";
         }
 
-    # Redirect everything else to HTTPS
+        # Redirect everything else to HTTPS
         location / {
             return 301 https://$host$request_uri;
         }
@@ -37,10 +87,11 @@ http {
         server_name taskmaneger.zapto.org;
 
         # SSL certificates
+        # SSL certificates
+        # SSL certificates
         ssl_certificate ${SSL_CERTIFICATE};
         ssl_certificate_key ${SSL_CERTIFICATE_KEY};
- 
-
+        
         # Security headers
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
         add_header X-Content-Type-Options "nosniff";
@@ -58,7 +109,6 @@ http {
             proxy_pass http://backend:8000/;
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         }
     }
 }
