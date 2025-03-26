@@ -1,0 +1,7 @@
+[nginx-http-auth]
+enabled  = true
+ignoreip = 127.0.0.1/8 192.168.1.0/24 45.167.4.6
+filter   = nginx-http-auth
+port     = http,https
+logpath  = /var/log/nginx/error.log
+maxretry = 3
