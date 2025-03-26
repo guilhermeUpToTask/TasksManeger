@@ -1,5 +1,0 @@
-![[Backup]]
-![[Database Schemas - Index]]
-![[Multiples DB]]
-![[Why postgree?]]
-![[Index setup]]
