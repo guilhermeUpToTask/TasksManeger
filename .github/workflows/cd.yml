@@ -25,8 +25,6 @@ jobs:
         SSL_CERTIFICATE: /etc/letsencrypt/live/taskmaneger.zapto.org/fullchain.pem
         SSL_CERTIFICATE_KEY: /etc/letsencrypt/live/taskmaneger.zapto.org/privkey.pem
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
 
       - name: Pull Latest Docker Images
         run: docker compose -f docker-compose.yml pull
