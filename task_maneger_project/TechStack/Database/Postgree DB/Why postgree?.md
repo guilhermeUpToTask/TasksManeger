@@ -1,1 +1,0 @@
-because its the db we have more familiarity and its a relational database, the best suit our app needs.

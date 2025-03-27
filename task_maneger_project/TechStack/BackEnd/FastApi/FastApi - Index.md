@@ -1,8 +1,0 @@
-![[Models - Index]]
-![[Routes Index]]
-![[Env Variables]]
-![[Folders structure]]
-![[MVC Arquiteture]]
-![[Postgree DB Integration - Index]]
-![[Error Handeling]]
-![[Log System]]
