@@ -100,4 +100,15 @@ data/  # If you have a data folder that shouldn't be tracked
 *.war
 *.apk
 
+#.env files
 .env
+
+#SSL Certificates
+certs/
+
+security/nginx
+#Fail2Ban Config
+fail2ban/
+
+#Obisidian Docs
+task_maneger_project/
