@@ -68,6 +68,7 @@ build/
 *.key
 *.pem
 *.pfx
+*.crt
 
 # Large files (consider using Git LFS for these)
 *.zip
