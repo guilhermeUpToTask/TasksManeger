@@ -1,28 +1,61 @@
+#Cmd to create the jail in the server
+#sudo bash -c 'cat > /etc/fail2ban/jail.local << EOL
+
 [DEFAULT]
-# Ban hosts for one hour:
-bantime = 3600
+# Global settings
+bantime = 86400  # Ban for 24 hours
+findtime = 1h    # 10-minute window for tracking attempts
+maxretry = 3     # Number of attempts before ban
+backend = auto
 
-# Override /etc/fail2ban/jail.conf
-ignoreip = 127.0.0.1/8 192.168.1.0/24 45.167.4.6
-           # Add your trusted IPs here, e.g., your office/home IP
+ignoreip = 192.168.1.0/24 45.167.4.6
 
+# Standard Nginx filters
 [nginx-http-auth]
 enabled = true
 port = http,https
 filter = nginx-http-auth
-logpath = /var/log/nginx/error.log
+logpath = /home/ec2-user/TasksManeger/nginx/logs/error.log
 maxretry = 3
 
-[nginx-badbots]
+[nginx-botsearch]
 enabled = true
 port = http,https
-filter = nginx-badbots
-logpath = /var/log/nginx/access.log
+filter = nginx-botsearch
+logpath = /home/ec2-user/TasksManeger/nginx/logs/access.log
 maxretry = 2
 
-[nginx-noscript]
+[nginx-limit-req]
 enabled = true
 port = http,https
-filter = nginx-noscript
-logpath = /var/log/nginx/access.log
-maxretry = 6
+filter = nginx-limit-req
+logpath = /home/ec2-user/TasksManeger/nginx/logs/error.log
+maxretry = 3
+
+# Jail for nginx-bad-request filter
+[nginx-bad-request]
+enabled  = true
+filter   = nginx-bad-request
+port     = http,https
+logpath  = /home/ec2-user/TasksManeger/nginx/logs/access.log
+maxretry = 3
+action   = iptables[name=BadRequest, port=http, protocol=tcp]
+
+# Jail for nginx-error-common filter
+[nginx-error-common]
+enabled  = true
+filter   = nginx-error-common
+port     = http,https
+logpath  = /home/ec2-user/TasksManeger/nginx/logs/error.log
+maxretry = 3
+
+# Jail for nginx-forbidden filter
+[nginx-forbidden]
+enabled  = true
+filter   = nginx-forbidden
+port     = http,https
+logpath  = /home/ec2-user/TasksManeger/nginx/logs/access.log
+maxretry = 3
+
+#End of the cmd
+#EOL'
