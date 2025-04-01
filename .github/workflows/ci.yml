@@ -37,9 +37,6 @@ jobs:
                 driver-opts: |
                   image=moby/buildkit:latest
                   network=host
-                buildkitd-config: |
-                  [worker.oci]
-                    cache-dir = "/tmp/.buildx-cache"
 
             - name: Restore Buildx cache
               uses: actions/cache@v3
