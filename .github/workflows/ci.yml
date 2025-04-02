@@ -1,8 +1,6 @@
 name: CI
 
 on:
-    push:
-        branches: [main]
     pull_request:
         branches: [main]
 
@@ -63,6 +61,8 @@ jobs:
                   BUILDKIT_CACHE_MOUNT_NS: ${{ github.run_id }}
                   BUILDKIT_CACHE_DIR: /tmp/buildx-cache
 
+
+                  
             - name: Start services
               run: docker compose up -d
 
