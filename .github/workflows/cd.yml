@@ -40,6 +40,8 @@ jobs:
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
                   script: |
                       cd /home/ec2-user/TasksManeger
+                      export BACKEND_IMAGE="$DOCKER_IMAGE_BACKEND"
+                      export NGINX_IMAGE="$DOCKER_IMAGE_NGINX"
                       docker compose -f docker-compose.yml pull
 
             - name: Stop and Remove Existing Containers
