@@ -1,32 +1,61 @@
 name: CD
 
 on:
-    push:
-      branches:
-        - main
-  
+  push:
+    branches:
+      - main
+
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env:
-        DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
-        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-        DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-        DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
-        PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-        DOCKER_IMAGE_BACKEND: ${{ vars.DOCKER_IMAGE_BACKEND }}
-        DOCKER_IMAGE_NGINX: ${{ vars.DOCKER_IMAGE_NGINX }}
-        SSL_CERTIFICATE: /etc/letsencrypt/live/taskmaneger.zapto.org/fullchain.pem
-        SSL_CERTIFICATE_KEY: /etc/letsencrypt/live/taskmaneger.zapto.org/privkey.pem
+      DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+      DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+      DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
+      PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+      DOCKER_IMAGE_BACKEND: ${{ vars.DOCKER_IMAGE_BACKEND }}
+      DOCKER_IMAGE_NGINX: ${{ vars.DOCKER_IMAGE_NGINX }}
+      SSL_CERTIFICATE: /etc/letsencrypt/live/taskmaneger.zapto.org/fullchain.pem
+      SSL_CERTIFICATE_KEY: /etc/letsencrypt/live/taskmaneger.zapto.org/privkey.pem
     steps:
+      - name: Login to Docker Hub
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
       - name: Pull Latest Docker Images
-        run: docker compose -f docker-compose.yml pull
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /path/to/your/project
+            docker compose -f docker-compose.yml pull
 
       - name: Stop and Remove Existing Containers
-        run: docker compose down
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /path/to/your/project
+            docker compose down
 
       - name: Restart Services with Updated Images
-        run: docker compose -f docker-compose.yml up -d --remove-orphans
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /path/to/your/project
+            docker compose -f docker-compose.yml up -d --remove-orphans
