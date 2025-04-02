@@ -35,7 +35,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          key: ${{ runner.os }}-buildx-${{ hashFiles('frontend/package.json') }}
           restore-keys: |
             ${{ runner.os }}-buildx-
 
