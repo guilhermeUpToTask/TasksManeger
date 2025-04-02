@@ -60,6 +60,7 @@ jobs:
                   BUILDKIT_PROGRESS: plain
               run: |
                   docker compose build \
+                    --exclude playwright \
                     --build-arg BUILDKIT_INLINE_CACHE=1 \
                     --build-arg BUILDKIT_CACHE_FROM=type=local,src=/tmp/.buildx-cache \
                     --build-arg BUILDKIT_CACHE_TO=type=local,dest=/tmp/.buildx-cache-new,mode=max \
