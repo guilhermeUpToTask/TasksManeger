@@ -51,6 +51,9 @@ jobs:
                   username: ${{ secrets.DOCKER_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+            - name: Ensure Cache Directory Exists
+              run: mkdir -p /tmp/.buildx-cache /tmp/.buildx-cache-new
+
             - name: Build all images with caching
               env:
                   DOCKER_BUILDKIT: 1
@@ -61,7 +64,9 @@ jobs:
                     --build-arg BUILDKIT_CACHE_FROM=type=local,src=/tmp/.buildx-cache \
                     --build-arg BUILDKIT_CACHE_TO=type=local,dest=/tmp/.buildx-cache-new,mode=max \
                     --progress plain
-                  # Update the cache folder for future runs
+
+            - name: Move New Cache to Persist It
+              run: |
                   rm -rf /tmp/.buildx-cache && mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
             - name: Start services
