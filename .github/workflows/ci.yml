@@ -58,9 +58,9 @@ jobs:
               env:
                   DOCKER_BUILDKIT: 1
                   BUILDKIT_PROGRESS: plain
+              #Exclude playwright in docker compose build --exclude flag not working in this runner
               run: |
-                  docker compose build \
-                    --exclude playwright \
+                  docker compose build backend prestart nginx db\
                     --build-arg BUILDKIT_INLINE_CACHE=1 \
                     --build-arg BUILDKIT_CACHE_FROM=type=local,src=/tmp/.buildx-cache \
                     --build-arg BUILDKIT_CACHE_TO=type=local,dest=/tmp/.buildx-cache-new,mode=max \
@@ -71,7 +71,7 @@ jobs:
                   rm -rf /tmp/.buildx-cache && mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
             - name: Start services
-              run: docker compose up -d
+              run: docker compose up backend prestart nginx db -d
 
             - name: Wait for Database to be Ready
               run: |
