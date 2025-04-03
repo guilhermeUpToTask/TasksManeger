@@ -43,7 +43,6 @@ jobs:
 
                   script: |
                       cd /home/ec2-user/TasksManeger
-                      echo "ENV:$DOCKER_IMAGE_BACKEND "
                       docker compose -f docker-compose.yml pull 
 
             - name: Stop and Remove Existing Containers
