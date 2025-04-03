@@ -62,12 +62,5 @@ jobs:
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
                   envs: DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME, DATABASE_PORT, PROJECT_NAME, DOCKER_IMAGE_BACKEND, DOCKER_IMAGE_NGINX, SSL_CERTIFICATE, SSL_CERTIFICATE_KEY
                   script: |
-                      echo "Verifying environment variables:"
-                      echo "PROJECT: ${PROJECT_NAME:-[NOT SET]}"
-                      echo "DB: ${DATABASE_USERNAME:-[NOT SET]}@*****:${DATABASE_PORT:-[NOT SET]}/${DATABASE_NAME:-[NOT SET]}"
-                      echo "IMAGES: Backend=${DOCKER_IMAGE_BACKEND:-[NOT SET]}, Nginx=${DOCKER_IMAGE_NGINX:-[NOT SET]}"
-                      echo "SSL: Cert=${SSL_CERTIFICATE:+[SET]}, Key=${SSL_CERTIFICATE_KEY:+[SET]}"
-                      echo "Secrets: DB_PWD=${DATABASE_PASSWORD:+[MASKED]}, SSL_CERT=${SSL_CERTIFICATE:+[MASKED]}, SSL_KEY=${SSL_CERTIFICATE_KEY:+[MASKED]}"
-                      
                       cd /home/ec2-user/TasksManeger
                       docker compose -f docker-compose.yml up -d --remove-orphans
