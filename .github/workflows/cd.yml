@@ -39,20 +39,12 @@ jobs:
                   username: ${{ secrets.SSH_USERNAME }}
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
                   envs:
-                    DATABASE_USERNAME
-                    DATABASE_PASSWORD
-                    DATABASE_NAME
-                    DATABASE_PORT
-                    PROJECT_NAME
-                    DOCKER_USERNAME
-                    DOCKERHUB_TOKEN
-                    DOCKER_IMAGE_BACKEND=${{ vars.DOCKER_IMAGE_BACKEND }}
-                    DOCKER_IMAGE_NGINX=${{ vars.DOCKER_IMAGE_NGINX }}
-                    SSL_CERTIFICATE
-                    SSL_CERTIFICATE_KEY
+                    DOCKER_IMAGE_BACKEND, DOCKER_IMAGE_NGINX
+
                   script: |
                       cd /home/ec2-user/TasksManeger
-                      docker compose -f docker-compose.yml pull
+                      echo "ENV:$DOCKER_IMAGE_BACKEND "
+                      docker compose -f docker-compose.yml pull -e DOCKER_IMAGE_BACKEND -e DOCKER_IMAGE_NGINX
 
             - name: Stop and Remove Existing Containers
               uses: appleboy/ssh-action@v1
