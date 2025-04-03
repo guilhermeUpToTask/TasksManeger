@@ -46,8 +46,8 @@ jobs:
                     PROJECT_NAME
                     DOCKER_USERNAME
                     DOCKERHUB_TOKEN
-                    DOCKER_IMAGE_BACKEND
-                    DOCKER_IMAGE_NGINX
+                    DOCKER_IMAGE_BACKEND=${{ vars.DOCKER_IMAGE_BACKEND }}
+                    DOCKER_IMAGE_NGINX=${{ vars.DOCKER_IMAGE_NGINX }}
                     SSL_CERTIFICATE
                     SSL_CERTIFICATE_KEY
                   script: |
