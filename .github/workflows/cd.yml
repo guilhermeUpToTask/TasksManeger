@@ -38,8 +38,7 @@ jobs:
                   host: ${{ secrets.SSH_HOST }}
                   username: ${{ secrets.SSH_USERNAME }}
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
-                  envs: DOCKER_IMAGE_BACKEND, DOCKER_IMAGE_NGINX
-
+                  envs: DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME, DATABASE_PORT, PROJECT_NAME, DOCKER_IMAGE_BACKEND, DOCKER_IMAGE_NGINX, SSL_CERTIFICATE, SSL_CERTIFICATE_KEY
                   script: |
                       cd /home/ec2-user/TasksManeger
                       docker compose -f docker-compose.yml pull
@@ -50,6 +49,7 @@ jobs:
                   host: ${{ secrets.SSH_HOST }}
                   username: ${{ secrets.SSH_USERNAME }}
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
+                  envs: DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME, DATABASE_PORT, PROJECT_NAME, DOCKER_IMAGE_BACKEND, DOCKER_IMAGE_NGINX, SSL_CERTIFICATE, SSL_CERTIFICATE_KEY
                   script: |
                       cd /home/ec2-user/TasksManeger
                       docker compose down
