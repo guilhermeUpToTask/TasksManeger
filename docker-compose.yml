@@ -31,6 +31,7 @@ services:
             - DATABASE_HOST=db # ← This is the critical fix
             - DATABASE_NAME=${DATABASE_NAME}
             - DATABASE_PORT=${DATABASE_PORT}
+            - GOOGLE_API_KEY=${GOOGLE_API_KEY}
         ports:
             - "8000:8000"
         depends_on:
@@ -56,6 +57,7 @@ services:
             - DATABASE_HOST=db
             - DATABASE_NAME=${DATABASE_NAME}
             - DATABASE_PORT=${DATABASE_PORT}
+            - GOOGLE_API_KEY=${GOOGLE_API_KEY}
     nginx:
         image: ${DOCKER_IMAGE_NGINX}
         build:

@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     DATABASE_HOST: str
     DATABASE_NAME: str
     DATABASE_PORT: int
+    GOOGLE_API_KEY: str
 
     @computed_field  # type: ignore[prop-decorator]
     @property
