@@ -16,6 +16,7 @@ jobs:
             PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
             DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
             DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+            GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY}}
             DOCKER_IMAGE_BACKEND: ${{ vars.DOCKER_IMAGE_BACKEND }}
             DOCKER_IMAGE_NGINX: ${{ vars.DOCKER_IMAGE_NGINX }}
             SSL_CERTIFICATE: /etc/letsencrypt/live/taskmaneger.zapto.org/fullchain.pem
@@ -38,7 +39,7 @@ jobs:
                   host: ${{ secrets.SSH_HOST }}
                   username: ${{ secrets.SSH_USERNAME }}
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
-                  envs: DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME, DATABASE_PORT, PROJECT_NAME, DOCKER_IMAGE_BACKEND, DOCKER_IMAGE_NGINX, SSL_CERTIFICATE, SSL_CERTIFICATE_KEY
+                  envs: DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME, DATABASE_PORT, PROJECT_NAME, DOCKER_IMAGE_BACKEND, DOCKER_IMAGE_NGINX, SSL_CERTIFICATE, SSL_CERTIFICATE_KEY, GOOGLE_API_KEY
                   script: |
                       cd /home/ec2-user/TasksManeger
                       docker compose -f docker-compose.yml pull
@@ -49,7 +50,7 @@ jobs:
                   host: ${{ secrets.SSH_HOST }}
                   username: ${{ secrets.SSH_USERNAME }}
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
-                  envs: DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME, DATABASE_PORT, PROJECT_NAME, DOCKER_IMAGE_BACKEND, DOCKER_IMAGE_NGINX, SSL_CERTIFICATE, SSL_CERTIFICATE_KEY
+                  envs: DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME, DATABASE_PORT, PROJECT_NAME, DOCKER_IMAGE_BACKEND, DOCKER_IMAGE_NGINX, SSL_CERTIFICATE, SSL_CERTIFICATE_KEY, GOOGLE_API_KEY
                   script: |
                       cd /home/ec2-user/TasksManeger
                       docker compose down
@@ -60,7 +61,7 @@ jobs:
                   host: ${{ secrets.SSH_HOST }}
                   username: ${{ secrets.SSH_USERNAME }}
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
-                  envs: DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME, DATABASE_PORT, PROJECT_NAME, DOCKER_IMAGE_BACKEND, DOCKER_IMAGE_NGINX, SSL_CERTIFICATE, SSL_CERTIFICATE_KEY
+                  envs: DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME, DATABASE_PORT, PROJECT_NAME, DOCKER_IMAGE_BACKEND, DOCKER_IMAGE_NGINX, SSL_CERTIFICATE, SSL_CERTIFICATE_KEY, GOOGLE_API_KEY
                   script: |
                       cd /home/ec2-user/TasksManeger
                       docker compose -f docker-compose.yml up -d --remove-orphans
