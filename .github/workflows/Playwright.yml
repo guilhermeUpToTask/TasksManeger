@@ -21,6 +21,7 @@ jobs:
       DOCKER_IMAGE_BACKEND: ${{ vars.DOCKER_IMAGE_BACKEND }}
       DOCKER_IMAGE_NGINX: ${{ vars.DOCKER_IMAGE_NGINX }}
       PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
+      GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY}}
       VITE_API_URL: "http://localhost:8000"
     steps:
       - name: Checkout repository
