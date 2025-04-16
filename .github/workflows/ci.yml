@@ -15,6 +15,7 @@ jobs:
             PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
             DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
             DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+            GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY}}
             SSL_CERTIFICATE: /etc/nginx/certs/dev.crt
             SSL_CERTIFICATE_KEY: /etc/nginx/certs/dev.key
         steps:
